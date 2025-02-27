@@ -7,13 +7,14 @@ const ProductDetails = () => {
 
   if (!id) return <p className="text-center text-gray-500 mt-8">Produit non trouvé</p>;
 
-  const product = {}
+  const product = useSelector((state: RootState) =>
+    state.products.items.find((item) => item.id === Number(id))
+  );
 
   if (!product) return <p className="text-center text-gray-500 mt-8">Produit non trouvé</p>;
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      {/* Header Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
         <img
           src={product.thumbnail}
@@ -27,9 +28,7 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Product Info */}
         <div>
           <p className="text-gray-700 text-lg mb-6">{product.description}</p>
           <p className="text-2xl font-semibold text-red-600 mb-4">
@@ -40,7 +39,6 @@ const ProductDetails = () => {
           <p className="text-gray-500 text-lg">Stock restant : {product.stock}</p>
         </div>
 
-        {/* Metadata */}
         <div className="bg-gray-100 p-6 rounded-lg shadow">
           <p className="mb-2">SKU : {product.sku}</p>
           <p className="mb-2">Poids : {product.weight} kg</p>
@@ -53,26 +51,15 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      {/* Reviews */}
       <div className="mt-10">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6">Commentaires</h2>
-        <div className="space-y-6">
-          {product.reviews.map((review, index) => (
-            <div
-              key={index}
-              className="bg-white p-6 rounded-lg shadow flex flex-col gap-4 border border-gray-200"
-            >
-              <div className="flex justify-between">
-                <p className="font-semibold text-lg text-gray-800">{review.reviewerName}</p>
-                <p className="text-sm text-gray-500">Évaluation : {review.rating} / 5</p>
-              </div>
-              <p className="text-gray-700">{review.comment}</p>
-              <p className="text-sm text-gray-400">
-                Publié le : {new Date(review.date).toLocaleDateString()}
-              </p>
-            </div>
-          ))}
-        </div>
+        <h2 className="text-2xl font-bold mb-4">Avis des utilisateurs</h2>
+        {product.reviews.map((review, index) => (
+          <div key={index} className="bg-white p-6 rounded-lg shadow mb-4">
+            <p className="font-bold">{review.reviewerName}</p>
+            <p className="text-gray-600">{review.comment}</p>
+            <p className="text-gray-500 text-sm">Publié le : {review.date}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
